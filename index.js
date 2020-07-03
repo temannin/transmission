@@ -3,6 +3,8 @@ const Router = require("@koa/router");
 const fs = require("fs");
 const marked = require("marked");
 let ejs = require("ejs");
+const minify = require("minify");
+const logger = require("koa-logger");
 
 var app = new Koa();
 var router = new Router();
@@ -41,29 +43,29 @@ const site = {
 };
 
 // response
-app.use(router.routes()).use(async (ctx, next) => {
-  if (!isEmpty(ctx.request.url) && ctx.request.url in mapping) {
-    const extension = fileExtension(ctx.request.url);
-    ctx.response.type = mimeTypes[extension]
-      ? mimeTypes[extension]
-      : mimeTypes["html"];
+app
+  .use(logger())
+  .use(router.routes())
+  .use(async (ctx, next) => {
+    if (!isEmpty(ctx.request.url) && ctx.request.url in mapping) {
+      const extension = fileExtension(ctx.request.url);
+      ctx.response.type = mimeTypes[extension]
+        ? mimeTypes[extension]
+        : mimeTypes["html"];
 
-    if (ctx.response.type === "text/html") {
-      ejs.renderFile(
-        `./content/${mapping[ctx.request.url]}`,
-        { site: site },
-        {},
-        function (err, str) {
-          ctx.response.body = str;
-        }
-      );
-    } else {
-      ctx.response.body = fs.createReadStream(
-        `./content/${mapping[ctx.request.url]}`
-      );
+      if (ctx.response.type === "text/html") {
+        let filePath = `./content/${mapping[ctx.request.url]}`;
+        await minify(filePath).then((data) => {
+          ctx.response.body = ejs.render(data, { site: site });
+        });
+      } else {
+        let filePath = `./content/${mapping[ctx.request.url]}`;
+        await minify(filePath).then((data) => {
+          ctx.response.body = data;
+        });
+      }
     }
-  }
-});
+  });
 
 function getPosts() {
   let posts = [];
