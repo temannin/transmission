@@ -5,6 +5,7 @@ const marked = require("marked");
 let ejs = require("ejs");
 const minify = require("minify");
 const logger = require("koa-logger");
+var mime = require("mime-types");
 
 var app = new Koa();
 var router = new Router();
@@ -25,17 +26,6 @@ marked.setOptions({
   xhtml: false,
 });
 
-const mapping = {
-  "/": "index.html",
-  "/index.html": "index.html",
-  "/style.css": "style.css",
-};
-
-const mimeTypes = {
-  html: "text/html",
-  css: "text/css",
-};
-
 const site = {
   title: "Tyler's Programming Blog",
   tagline: "General programming tomfoolery",
@@ -47,24 +37,25 @@ app
   .use(logger())
   .use(router.routes())
   .use(async (ctx, next) => {
-    if (!isEmpty(ctx.request.url) && ctx.request.url in mapping) {
-      const extension = fileExtension(ctx.request.url);
-      ctx.response.type = mimeTypes[extension]
-        ? mimeTypes[extension]
-        : mimeTypes["html"];
+    let contentRequest =
+      ctx.request.url === "/" ? "/index.html" : ctx.request.url;
 
-      if (ctx.response.type === "text/html") {
-        let filePath = `./content/${mapping[ctx.request.url]}`;
-        await minify(filePath).then((data) => {
-          ctx.response.body = ejs.render(data, { site: site });
-        });
-      } else {
-        let filePath = `./content/${mapping[ctx.request.url]}`;
-        await minify(filePath).then((data) => {
-          ctx.response.body = data;
-        });
-      }
-    }
+    const type = mime.lookup(fileExtension(contentRequest));
+    ctx.response.type = type ? type : "text/html";
+
+    let filePath = `./content${contentRequest}`;
+    await minify(filePath)
+      .then((data) => {
+        let body = data;
+        if (type === "text/html") {
+          body = ejs.render(data, { site: site });
+        }
+        ctx.response.body = body;
+      })
+      .catch((err) => {
+        console.log(err);
+        ctx.response.status = 404;
+      });
   });
 
 function getPosts() {
