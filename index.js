@@ -32,6 +32,25 @@ const site = {
   posts: getPosts(),
 };
 
+router.get("/posts/:uri", (ctx, next) => {
+  let uri = encodeURI(ctx.params.uri);
+  site.posts.forEach((element) => {
+    if (element.uri === uri) {
+      let body = fs
+        .readFileSync(element.path, "utf-8")
+        .substring(3)
+        .split("---")[1];
+      let wrapper = fs.readFileSync("./content/views/posts.html", "utf-8");
+      ctx.response.body = minify.html(
+        ejs.render(wrapper, {
+          site: element,
+          post: minify.html(marked(body)),
+        })
+      );
+    }
+  });
+});
+
 // response
 app
   .use(logger())
@@ -53,7 +72,6 @@ app
         ctx.response.body = body;
       })
       .catch((err) => {
-        console.log(err);
         ctx.response.status = 404;
       });
   });
@@ -71,6 +89,9 @@ function getPosts() {
       var value = JSON.parse("{" + element + "}")[key];
       post[key] = value;
     });
+    post["uri"] = encodeURI(post["title"]);
+    post["path"] = `./content/posts/${file}`;
+    post["time"] = fs.statSync(post["path"]).mtime;
     posts.push(post);
   });
   return posts;

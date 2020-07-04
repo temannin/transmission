@@ -1,13 +1,38 @@
-@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700;800&display=swap");
 
-html,
-body {
-  font-family: "Source Code Pro", monospace;
+body,
+html {
+  font-family: "Open Sans", sans-serif;
 }
 
 body {
   width: 40%;
   margin: 0 auto;
+}
+
+#back {
+  position: absolute;
+  left: 150px;
+  padding: 20px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+#back:hover {
+  border: 2px solid black;
+}
+
+#back:active {
+  border: 2px solid gray;
+}
+
+.date {
+  position: relative;
+  font-size: 14px;
+  top: -20px;
+  margin: 0;
+  padding: 0;
 }
 
 #posts {
@@ -33,4 +58,10 @@ body {
 
 #posts > li:active {
   border: 4px solid #848788;
+}
+
+.post-title {
+  border-bottom: 2px solid currentColor;
+  line-height: 0.95;
+  text-shadow: 2px 2px white, 2px -2px white, -2px 2px white, -2px -2px white;
 }

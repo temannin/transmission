@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+  <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title><%= site.title %></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="stylesheet"
+      href="https://rawcdn.githack.com/highlightjs/highlight.js/465c2fe9e4964e10c239552f2fac912a547adbba/src/styles/a11y-dark.css"
+    />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </head>
+  <body>
+    <h1 class="post-title" style="font-size: 48px; font-weight: 900;">
+      <svg
+        id="back"
+        width="24px"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+      <%= site.title %>
+    </h1>
+    <span class="date">
+      <%= site.time.toLocaleDateString("en-US", { weekday: 'long', year:
+      'numeric', month: 'long', day: 'numeric' }) %>
+    </span>
+    <%- post %>
+  </body>
+  <script>
+    document.getElementById("back").addEventListener("click", function () {
+      window.location.href = window.location.origin;
+    });
+  </script>
+</html>

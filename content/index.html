@@ -21,11 +21,13 @@
   <body>
     <h2>Posts:</h2>    
     <ul id="posts">
-        <% for(var i=0; i<site.posts.length; i++) {%>
-           <li>
-            <h2><%= site.posts[i].title %></h2>
-            <p><%= site.posts[i].description %></p>               
-           </li>
+        <% for(var i=0; i<site.posts.length; i++) {%>          
+            <li>
+              <a href="/posts/<%= site.posts[i].uri %>">
+              <h2><%= site.posts[i].title %></h2>
+              <p><%= site.posts[i].description %></p>
+            </a>               
+             </li>
         <% } %>
         </ul>
   </body>
