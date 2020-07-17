@@ -6,8 +6,7 @@
 # Introduction
 
 Believe it or not the code below is probably my favorite piece of code all of all-time. The reason I love it so much is because of the doors it
-unlocked for me. When I stumbled onto to this code, I was just starting my Software Development career and really only *knew* Java despite what my résumé said. 
-My first real project was to write an application that helped with testing 
+unlocked for me. When I stumbled onto to this code, I was just starting my Software Development career and really only *knew* Java. Although I had graduated, I felt like an imposter. Like I didn't really learn anything and if I did learn something it was going to be useless. 
 
 ```csharp
 // MIT License - Copyright (c) 2016 Can Güney Aksakalli
